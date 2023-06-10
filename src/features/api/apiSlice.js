@@ -9,13 +9,14 @@ export const todoApi = createApi({
   endpoints: (builder) => ({
     getTodo: builder.query({
       query: () => '/todos',
+      transformResponse: (res) => res.sort((a, b) => b.id - a.id),
       providesTags: ['todoApi'],
     }),
-    updateTodo: builder.mutation({
-      query: (newTodo) => ({
-        url: `/todos/${newTodo.id}`,
-        method: 'PATCH',
-        body: newTodo,
+    addTodo: builder.mutation({
+      query: (addTodo) => ({
+        url: `/todos`,
+        method: 'POST',
+        body: addTodo,
       }),
       invalidatesTags: ['todoApi'],
     }),
@@ -33,5 +34,5 @@ export const todoApi = createApi({
 export const {
   useGetTodoQuery,
   useDeleteTodoMutation,
-  useUpdateTodoMutation,
+  useAddTodoMutation,
 } = todoApi

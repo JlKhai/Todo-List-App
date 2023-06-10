@@ -1,19 +1,21 @@
 import { useState } from 'react'
 import { FaUpload } from 'react-icons/fa'
 import {
+  useAddTodoMutation,
   useDeleteTodoMutation,
   useGetTodoQuery,
-  useUpdateTodoMutation,
 } from '../api/apiSlice'
 import { Checkbox, Loader } from '@mantine/core'
 import { AiFillDelete } from 'react-icons/ai'
 const TodoList = () => {
-  const { data: todo, isLoading } = useGetTodoQuery()
-  console.log(todo)
-  const [updateTodo] = useUpdateTodoMutation()
-  const [deleteTodo] = useDeleteTodoMutation()
   const [list, setList] = useState('')
 
+  const { data: todos, isLoading } = useGetTodoQuery()
+  // console.log(todo)
+  const [addTodo] = useAddTodoMutation()
+  const [deleteTodo] = useDeleteTodoMutation()
+
+  //show loading icon while loading
   if (isLoading) {
     return (
       <Loader
@@ -24,15 +26,17 @@ const TodoList = () => {
       />
     )
   }
+
   const listSubmitHandler = (e) => {
     e.preventDefault()
-    updateTodo({
+    console.log(list)
+    const newList = {
       userId: 1,
       id: Date.now(),
       title: list,
-      completed: false,
-    })
-    todo(updateTodo)
+    }
+    addTodo(newList)
+    setList('')
   }
 
   return (
@@ -53,17 +57,20 @@ const TodoList = () => {
           <FaUpload className="text-violet-800 hover:scale-95 bg-white text-4xl cursor-pointer select-none  border p-1 " />
         </button>
       </form>
-      <div className="w-96 px-16 py-2">
-        {todo?.map((todo) => {
+      <div className="w-96 px-16 py-2 mt-2">
+        {todos?.map((todo) => {
           return (
             <div key={todo.id} className="flex justify-between">
-              <div className="flex items-center  gap-2">
+              <div className="flex items-center mb-2 gap-2">
                 <Checkbox color="green" />
 
                 <p className="text-white mt-1 select-none">{todo?.title}</p>
               </div>
-              <div onClick={() => deleteTodo(todo.id)}>
-                <AiFillDelete className="text-white text-2xl cursor-pointer hover:text-red-500 hover:scale-90" />
+              <div className="flex gap-2">
+                <AiFillDelete
+                  onClick={() => deleteTodo(todo?.id)}
+                  className="text-white text-3xl  p-1 border cursor-pointer hover:text-red-500 hover:scale-90"
+                />
               </div>
             </div>
           )
