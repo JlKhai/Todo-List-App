@@ -5,7 +5,7 @@ import {
   useDeleteTodoMutation,
   useGetTodoQuery,
 } from '../api/apiSlice'
-import { Checkbox, Loader } from '@mantine/core'
+import { Loader } from '@mantine/core'
 import { AiFillDelete } from 'react-icons/ai'
 import Contactme from '../../components/Contactme'
 const TodoList = () => {
@@ -52,7 +52,7 @@ const TodoList = () => {
             value={list}
             onChange={(e) => setList(e.target.value)}
             type="text"
-            className="px-3 md:px-4 py-2 border-2 outline-none rounded-lg bg-gray-300 focus:bg-white transition ease-in duration-200"
+            className=" px-3 md:px-4 py-2 border-2 outline-none rounded-lg bg-gray-300 focus:bg-white transition ease-in duration-200"
             placeholder="Enter new todo "
           />
           <button type="submit">
@@ -64,9 +64,18 @@ const TodoList = () => {
             return (
               <div key={todo.id} className="flex justify-between">
                 <div className="flex items-center mb-2 gap-2">
-                  <Checkbox color="green" />
-
-                  <p className="text-white mt-1 select-none">{todo?.title}</p>
+                  <input
+                    type="checkbox"
+                    id={todo?.id}
+                    className="peer cursor-pointer h-4 w-4"
+                  />
+                  <label
+                    className="cursor-pointer text-white text-lg select-none peer-checked:line-through peer-checked:text-gray-400"
+                    htmlFor={todo?.id}
+                  >
+                    {' '}
+                    {todo?.title}
+                  </label>
                 </div>
                 <div className="flex gap-2">
                   <AiFillDelete
